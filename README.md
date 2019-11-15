@@ -8,7 +8,9 @@ This module aims to set up an identity provider built on:
 
 This module will output the URL for the API Gateway which should be used as the ***url*** argument for the ***aws_transfer_server*** resource
 
-A DynamoDB table will be created by the resource
+A DynamoDB table will be created by the resource and is used to store SFTP user credentials and user directory details.
+
+The infrastructure code is based on the example provided (in the CF template) in the AWS Storage Blog article https://aws.amazon.com/blogs/storage/enable-password-authentication-for-aws-transfer-for-sftp-using-aws-secrets-manager/. That example uses AWS Secrets Manager which costs $0.40 per Secret so a DynamoDB based solution may be more palatable as having many users may incur high costs.
 
 ## Inputs
 
@@ -33,19 +35,11 @@ module "sftp-idp" {
 
 
 ## Examples
-- [Transfer Server and R53 Record](https://github.com/BorisLabs/terraform-aws-transfer/tree/master/examples/server-and-r53)
-    * This example creates an IAM logging role and R53 zone also
-- [Transfer User only](https://github.com/BorisLabs/terraform-aws-transfer/tree/master/examples/transfer-user-only)
+- [Use public Transfer service](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public)
+    * This example creates an SFTP service, a bucket for storage and an IAM role for the user along with the API Gateway IdP
 
 
 ## Terraform Versions
-This module supports Terraform v0.11 from v0.0.1
-Terraform v0.12 support is coming soon...
+This module supports Terraform v0.12
 
-## Authors
-Module managed by  
-[Rob Houghton](https://github.com/ALLFIVE)  
-[Josh Sinfield](https://github.com/JoshiiSinfield)  
-[Ben Arundel](https://github.com/barundel)
 
-## Notes

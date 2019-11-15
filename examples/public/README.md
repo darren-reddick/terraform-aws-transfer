@@ -1,51 +1,32 @@
-# terraform-aws-transfer
-Terraform Module for a custom identity provider for the AWS Transfer for SFTP service.  
+# SImple Public SFTP example
 
-This module aims to set up an identity provider built on:
-* API Gateway
-* Lambda
-* DynamoDB
+This example creates a simple public facing AWS Transfer for SFTP service using the API_GATEWAY identity provider. 
 
-This module will output the URL for the API Gateway which should be used as the ***url*** argument for the ***aws_transfer_server*** resource
+A bucket will be created to store the files along with an IAM role for the user to access the service.
 
-A DynamoDB table will be created by the resource
+## Usage
 
-## Inputs
+    $ terraform init
+    $ terraform plan
+    $ terraform apply
 
-| Name | Description | Type | Default | Required |
+
+## Example User Configuration
+
+Once the service has been started, a user can be set up by adding a record to the DynamoDB table as follows:
+
+NOTE: All fields are ***String*** fields including the ***HomeDirectoryDetails*** which should contain a JSON string
+
+| UserId (S) | HomeDirectoryDetails (S) | Role (S) | Password (S) |
 |------|-------------|:----:|:-----:|:-----:|
-| dynamo_table_name | A name for the dynamodb table that will be created | string |  | yes |
+| user1 | [{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/${Transfer:UserName}\"}] | arn:aws:iam::218071597196:role/transfer-user-iam-role | Password1 |
+
+This will create a user **user1** which is chroot'd to the **/test.devopsgoat/user1** virtual directory in S3.
+
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| invoke_url | The URL which the SFTP service will use to send authentication requests to |
-| rest_api_id | The ARN of the REST service created. <br>This should be used in the IAM role for SFTP to invoke the service |
+| sftp-endpoint | The endpoint of the SFTP service |
 
-## Usage
-```hcl-terraform
-module "sftp-idp" {
-  source                = "../.."
-  dynamo_table_name      = "my-sftp-authentication-table"
-}
-```
-
-
-## Examples
-- [Transfer Server and R53 Record](https://github.com/BorisLabs/terraform-aws-transfer/tree/master/examples/server-and-r53)
-    * This example creates an IAM logging role and R53 zone also
-- [Transfer User only](https://github.com/BorisLabs/terraform-aws-transfer/tree/master/examples/transfer-user-only)
-
-
-## Terraform Versions
-This module supports Terraform v0.11 from v0.0.1
-Terraform v0.12 support is coming soon...
-
-## Authors
-Module managed by  
-[Rob Houghton](https://github.com/ALLFIVE)  
-[Josh Sinfield](https://github.com/JoshiiSinfield)  
-[Ben Arundel](https://github.com/barundel)
-
-## Notes
