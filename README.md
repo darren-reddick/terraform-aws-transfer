@@ -35,8 +35,12 @@ module "sftp-idp" {
 
 
 ## Examples
+<<<<<<< HEAD
 - [Use public Transfer service](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public)
     * This example creates an SFTP service, a bucket for storage and an IAM role for the user along with the API Gateway IdP
+=======
+
+>>>>>>> 7ebf775314ece4bff6b4ef5976bf2c6abaf76a55
 
 
 ## Terraform Versions
