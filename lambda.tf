@@ -67,3 +67,8 @@ resource "aws_iam_role_policy_attachment" "sftp-idp1" {
   role = "${aws_iam_role.iam_for_lambda_idp.name}"
   policy_arn = "${aws_iam_policy.sftp-idp.arn}"
 }
+
+resource "aws_iam_role_policy_attachment" "sftp-idp2" {
+  role = "${aws_iam_role.iam_for_lambda_idp.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
