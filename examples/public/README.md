@@ -17,7 +17,7 @@ Once the service has been started, a user can be set up by adding a record to th
 
 NOTE: All fields are ***String*** fields including the ***HomeDirectoryDetails*** which should contain a JSON string
 
-| UserId (S) | HomeDirectoryDetails (S) | Role (S) | Password (S) |
+| UserId | HomeDirectoryDetails | Role | Password |
 |------|-------------|:----:|:-----:|:-----:|
 
 
