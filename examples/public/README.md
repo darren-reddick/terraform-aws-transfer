@@ -19,6 +19,9 @@ NOTE: All fields are ***String*** fields including the ***HomeDirectoryDetails**
 
 | UserId (S) | HomeDirectoryDetails (S) | Role (S) | Password (S) |
 |------|-------------|:----:|:-----:|:-----:|
+
+
+
 | user1 | [{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/${Transfer:UserName}\"}] | arn:aws:iam::218071597196:role/transfer-user-iam-role | Password1 |
 
 This will create a user **user1** which is chroot'd to the **/test.devopsgoat/user1** virtual directory in S3.
