@@ -7,8 +7,8 @@ resource "aws_lambda_function" "sftp-idp" {
   runtime          = "python3.7"
   environment {
     variables = {
-      SecretsManagerRegion = "eu-west-1"
-      dynamo_table_name = "${aws_dynamodb_table.authentication.name}"
+      SecretsManagerRegion = "eu-west-2"
+      //dynamo_table_name = "${aws_dynamodb_table.authentication.name}"
     }
   }
 }
@@ -57,6 +57,11 @@ resource "aws_iam_policy" "sftp-idp" {
             "Effect": "Allow",
             "Action": "dynamodb:GetItem",
             "Resource": "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.authentication.name}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:SFTP/*"
         }
     ]
 }
