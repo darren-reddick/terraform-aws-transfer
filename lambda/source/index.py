@@ -6,13 +6,25 @@ from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
     resp_data = {}
+    auth_map = {
+        "dynamo" : auth_dynamo,
+        "secrets" : get_secret
+    }
+    if os.environ.get("dynamo_table_name"):
+        auth = auth_map["dynamo"]
+    elif os.environ.get("SecretsManagerRegion"):
+        auth = auth_map["secrets"]
+    else:
+        print("No authentication method set")
+        return {}
+
 
     if 'username' not in event or 'serverId' not in event:
         print("Incoming username or serverId missing  - Unexpected")
         return response_data
 
     input_username = event['username']
-    print("Username: {}, ServerId: {}".format(input_username, event['serverId']));
+    print("Username: {}, ServerId: {}".format(input_username, event['serverId']))
 
     if 'password' in event:
         input_password = event['password']
@@ -20,8 +32,8 @@ def lambda_handler(event, context):
         print("No password, checking for SSH public key")
         input_password = ''
 
-    # Lookup user's account in DynamoDB
-    resp = auth_dynamo(input_username)
+    # Lookup user's account in creds store
+    resp = auth(input_username)
 
     if resp != None:
         resp_dict = resp
@@ -95,4 +107,25 @@ def auth_dynamo(id):
             return None
     except ClientError as err:
         print('Error Talking to Dynamo: ' + err.response['Error']['Code'] + ', Message: ' + str(err))
+        return None
+
+def get_secret(id):
+    region = os.environ['SecretsManagerRegion']
+    print("Secrets Manager Region: "+region)
+
+    client = boto3.session.Session().client(service_name='secretsmanager', region_name=region)
+
+    try:
+        resp = client.get_secret_value(SecretId='SFTP/'+id)
+        # Decrypts secret using the associated KMS CMK.
+        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        print(resp['SecretString'])
+        if 'SecretString' in resp:
+            print("Found Secret String")
+            return json.loads(resp['SecretString'])
+        else:
+            print("Found Binary Secret")
+            return json.loads(base64.b64decode(resp['SecretBinary']))
+    except ClientError as err:
+        print('Error Talking to SecretsManager: ' + err.response['Error']['Code'] + ', Message: ' + str(err))
         return None
