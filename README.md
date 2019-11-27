@@ -21,7 +21,7 @@ The infrastructure code is based on the example provided (in the CF template) in
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | dynamo_table_name | A name for the dynamodb table that will be created | string |  | yes |
-| creds_store | The creds store that will be used for authentication | string | dynamo | yes |
+| creds_store | The creds store that will be used for authentication<br>Valid should be: **dynamo** or **secrets** | string | dynamo | yes |
 
 ## Outputs
 
