@@ -7,11 +7,11 @@ resource "aws_lambda_function" "sftp-idp" {
   runtime          = "python3.7"
   environment {
     variables = {
-      SecretsManagerRegion = "eu-west-2"
-      //dynamo_table_name = "${aws_dynamodb_table.authentication.name}"
+      "${var.creds_store == "dynamo" ? "dynamo_table_name" : "SecretsManagerRegion"}" = "${var.creds_store == "dynamo" ? aws_dynamodb_table.authentication.name : data.aws_region.current.name}"
     }
   }
 }
+
 
 data "archive_file" "sftp-idp" {
   type        = "zip"
