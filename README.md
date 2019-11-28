@@ -44,6 +44,20 @@ module "sftp-idp" {
 * [Public with Dynamo](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public-dynamo)
 * [Public with AWS Secrets](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/private-dynamo)
 
+## Known Issues
+
+### API Gateway Deployment
+
+On subsequent application of changes to the infrastructure Terraform detects a change in the API Gateway deployment. The update will then fail with the following message:
+
+> Error: error deleting API Gateway Deployment (p9qtq5): BadRequestException: Active stages pointing to this deployment must be moved or deleted
+>         status code: 400, request id: 278c5cb7-5cf7-4628-8604-d924edd0f145
+
+The workaround for this is to taint the stage which uses the deployment before applying the infrastructure change - example:
+
+    terraform taint module.idp.aws_api_gateway_stage.prod
+
+
 
 ## Terraform Versions
 This module supports Terraform v0.12
