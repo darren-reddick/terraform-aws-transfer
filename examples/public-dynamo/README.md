@@ -1,4 +1,4 @@
-# SImple Public SFTP example
+# Simple Public SFTP example using DynamoDB
 
 This example creates a simple public facing AWS Transfer for SFTP service using the API_GATEWAY identity provider. 
 
