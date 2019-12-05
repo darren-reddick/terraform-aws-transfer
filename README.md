@@ -1,5 +1,5 @@
 # terraform-aws-transfer
-Terraform Module to create a custom identity provider for the AWS Transfer for SFTP service.  
+This is a Terraform module to create a custom identity provider for the AWS Transfer for SFTP service.  
 
 This module aims to set up an identity provider built on:
 * API Gateway
@@ -56,7 +56,6 @@ On subsequent application of changes to the infrastructure Terraform detects a c
 The workaround for this is to taint the stage which uses the deployment before applying the infrastructure change - example:
 
     terraform taint module.idp.aws_api_gateway_stage.prod
-
 
 
 ## Terraform Versions
