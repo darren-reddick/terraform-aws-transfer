@@ -24,6 +24,25 @@ The secret name should be SFTP/user1 for a user login **user1**
 
 This will create a user **user1** which is chroot'd to the **/test.devopsgoat/user1** virtual directory in S3.
 
+For guidance the following example code will create this Secret:
+
+    resource "aws_secretsmanager_secret" "secret" {
+      name                = "SFTP/tester"
+    }
+    
+    
+    resource "aws_secretsmanager_secret_version" "secret" {
+      secret_id     = "${aws_secretsmanager_secret.secret.id}"
+      secret_string = <<EOF
+    {
+      "HomeDirectoryDetails": "[{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/$${Transfer:UserName}\"}]",
+      "Password": "tester159",
+      "Role": "arn:aws:iam::XXXXXXX:role/transfer-user-iam-role",
+      "UserId": "tester"
+    }
+    EOF
+    }
+
 
 ## Outputs
 

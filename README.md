@@ -57,6 +57,7 @@ The workaround for this is to taint the stage which uses the deployment before a
 
     terraform taint module.idp.aws_api_gateway_stage.prod
 
+
 ## Terraform Versions
 This module supports Terraform v0.12
 

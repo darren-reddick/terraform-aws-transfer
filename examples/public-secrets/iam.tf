@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "foo" {
             "Action": [
                 "s3:*"
             ],
-            "Resource": "${aws_s3_bucket.sftp.arn}"
+            "Resource": ["${aws_s3_bucket.sftp.arn}","${aws_s3_bucket.sftp.arn}/*"]
         }
     ]
 }
