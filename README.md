@@ -48,7 +48,7 @@ module "sftp-idp" {
 
 ### API Gateway Deployment
 
-On subsequent application of changes to the infrastructure Terraform detects a change in the API Gateway deployment. The update will then fail with the following message:
+On subsequent application of changes to the infrastructure, Terraform detects a change in the API Gateway deployment. The update will then fail with the following message:
 
 > Error: error deleting API Gateway Deployment (p9qtq5): BadRequestException: Active stages pointing to this deployment must be moved or deleted
 >         status code: 400, request id: 278c5cb7-5cf7-4628-8604-d924edd0f145
