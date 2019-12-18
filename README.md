@@ -42,7 +42,7 @@ module "sftp-idp" {
 ## Examples
 
 * [Public with Dynamo](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public-dynamo)
-* [Public with AWS Secrets](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/private-dynamo)
+* [Public with AWS Secrets](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public-secrets)
 
 ## Known Issues
 
