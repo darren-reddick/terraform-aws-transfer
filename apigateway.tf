@@ -155,6 +155,9 @@ resource "aws_api_gateway_deployment" "prod" {
   variables = {
     deployed_at = "${timestamp()}"
   }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "prod" {
