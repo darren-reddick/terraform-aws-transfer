@@ -61,7 +61,7 @@ resource "aws_iam_role_policy" "sftp" {
 			"Action": [
 				"execute-api:Invoke"
 			],
-			"Resource": "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${module.idp.rest_api_id}/prod/GET/*"
+			"Resource": "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${module.idp.rest_api_id}/${module.idp.rest_api_stage_name}/GET/*"
 		},
 		{
 			"Sid": "ReadApi",
