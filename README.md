@@ -29,6 +29,7 @@ The infrastructure code is based on the example provided (in the CF template) in
 |------|-------------|
 | invoke_url | The URL which the SFTP service will use to send authentication requests to |
 | rest_api_id | The ARN of the REST service created. <br>This should be used in the IAM role for SFTP to invoke the service |
+| rest_api_stage_name | The stage name of the REST service created. <br> This should be used in the IAM role for SFTP to invoke the service |
 
 ## Usage
 ```hcl-terraform
