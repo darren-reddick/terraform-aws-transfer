@@ -46,6 +46,6 @@ module "sftp-idp" {
 * [Public with AWS Secrets](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public-secrets)
 
 ## Terraform Versions
-This module supports Terraform v0.12
+This module supports Terraform v0.12 and v0.13
 
 
