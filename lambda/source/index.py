@@ -18,7 +18,6 @@ def lambda_handler(event, context):
         print("No authentication method set")
         return {}
 
-
     if 'username' not in event or 'serverId' not in event:
         print("Incoming username or serverId missing  - Unexpected")
         return response_data
@@ -61,7 +60,7 @@ def lambda_handler(event, context):
 
     # If we've got this far then we've either authenticated the user by password or we're using SSH public key auth and
     # we've begun constructing the data response. Check for each key value pair.
-    # These are required so set to empty string if missing
+    # These are required so set to empty string if missing.
     if 'Role' in resp_dict:
         resp_data['Role'] = resp_dict['Role']
     else:

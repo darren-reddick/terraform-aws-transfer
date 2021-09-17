@@ -1,0 +1,6 @@
+.terraform
+
+# use a backend!
+*.tfstate*
+
+sftp-idp.zip

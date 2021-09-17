@@ -10,13 +10,11 @@ A bucket will be created to store the files along with an IAM role for the user 
     $ terraform plan
     $ terraform apply
 
-
 ## Example User Configuration
 
 Once the service has been started, a user can be set up by adding an AWS Secret:
 
 The secret name should be SFTP/user1 for a user login **user1**
-
 
 | UserId | HomeDirectoryDetails | Role | Password |
 |--------|----------------------|------|----------|
@@ -29,8 +27,8 @@ For guidance the following example code will create this Secret:
     resource "aws_secretsmanager_secret" "secret" {
       name                = "SFTP/tester"
     }
-    
-    
+
+
     resource "aws_secretsmanager_secret_version" "secret" {
       secret_id     = "${aws_secretsmanager_secret.secret.id}"
       secret_string = <<EOF
@@ -49,4 +47,3 @@ For guidance the following example code will create this Secret:
 | Name | Description |
 |------|-------------|
 | sftp-endpoint | The endpoint of the SFTP service |
-
