@@ -107,5 +107,7 @@ resource "aws_transfer_server" "sftp" {
 
 module "idp" {
   source      = "../.."
+
   creds_store = "secrets"
+  server_id = aws_transfer_server.sftp.id
 }
