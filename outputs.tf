@@ -1,3 +1,7 @@
+output "dynamo_table_name" {
+  value = var.dynamo_table_name
+}
+
 output "invoke_url" {
   value = aws_api_gateway_stage.prod.invoke_url
 }

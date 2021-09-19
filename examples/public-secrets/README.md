@@ -24,26 +24,27 @@ This will create a user **user1** which is chroot'd to the **/test.devopsgoat/us
 
 For guidance the following example code will create this Secret:
 
-    resource "aws_secretsmanager_secret" "secret" {
-      name                = "SFTP/tester"
-    }
+```
+resource "aws_secretsmanager_secret" "secret" {
+  name                = "SFTP/user1"
+}
 
-
-    resource "aws_secretsmanager_secret_version" "secret" {
-      secret_id     = "${aws_secretsmanager_secret.secret.id}"
-      secret_string = <<EOF
+resource "aws_secretsmanager_secret_version" "secret" {
+  secret_id     = "${aws_secretsmanager_secret.secret.id}"
+  secret_string = <<-EOF
     {
       "HomeDirectoryDetails": "[{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/$${Transfer:UserName}\"}]",
-      "Password": "tester159",
+      "Password": "Password1",
       "Role": "arn:aws:iam::XXXXXXX:role/transfer-user-iam-role",
-      "UserId": "tester"
+      "UserId": "user1"
     }
-    EOF
-    }
-
+  EOF
+}
+```
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| sftp-endpoint | The endpoint of the SFTP service |
+| endpoint | The endpoint of the SFTP service |
+| role | The IAM Role that must be assigned to users |
