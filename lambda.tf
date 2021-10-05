@@ -15,7 +15,7 @@ resource "aws_lambda_function" "sftp-idp" {
 
 data "archive_file" "sftp-idp" {
   type        = "zip"
-  source_dir = "${path.module}/lambda/source/"
+  source_dir  = "${path.module}/lambda/source/"
   output_path = "${path.module}/sftp-idp.zip"
 }
 
@@ -40,13 +40,13 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs_idp" {
-  role = "${aws_iam_role.iam_for_lambda_idp.name}"
+  role       = "${aws_iam_role.iam_for_lambda_idp.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_policy" "sftp-idp" {
-  name = "sftp-idp"
-  path = "/"
+  name        = "sftp-idp"
+  path        = "/"
   description = "IAM policy IdP service for SFTP in Lambda"
 
   policy = <<EOF
@@ -69,11 +69,11 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "sftp-idp1" {
-  role = "${aws_iam_role.iam_for_lambda_idp.name}"
+  role       = "${aws_iam_role.iam_for_lambda_idp.name}"
   policy_arn = "${aws_iam_policy.sftp-idp.arn}"
 }
 
 resource "aws_iam_role_policy_attachment" "sftp-idp2" {
-  role = "${aws_iam_role.iam_for_lambda_idp.name}"
+  role       = "${aws_iam_role.iam_for_lambda_idp.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }

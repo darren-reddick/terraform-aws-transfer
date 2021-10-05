@@ -1,0 +1,57 @@
+openapi: "3.0.1"
+info:
+  title: "sftp-idp-secrets"
+  description: "This API provides an IDP for AWS Transfer service"
+  version: 0.0.1
+paths:
+  /servers/{serverId}/users/{username}/config:
+    get:
+      parameters:
+      - name: "Password"
+        in: "header"
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserConfigResponseModel"
+      security:
+      - sigv4: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:177092215856:function:sftp-idp/invocations"
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\n  \"username\": \"$input.params('username')\",\n \
+            \ \"password\": \"$util.escapeJavaScript($input.params('Password')).replaceAll(\"\
+            \\\\'\",\"'\")\",\n  \"serverId\": \"$input.params('serverId')\"\n}\n"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        type: "aws"
+components:
+  schemas:
+    UserConfigResponseModel:
+      title: "UserUserConfig"
+      type: "object"
+      properties:
+        HomeDirectory:
+          type: "string"
+        Role:
+          type: "string"
+        Policy:
+          type: "string"
+        PublicKeys:
+          type: "array"
+          items:
+            type: "string"
+  securitySchemes:
+    sigv4:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "awsSigv4"
