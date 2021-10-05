@@ -3,5 +3,5 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 variable "creds_store" {
-    default = "dynamo"
+  default = "dynamo"
 }
