@@ -1,21 +1,21 @@
 resource "aws_iam_role" "iam_for_apigateway_idp" {
   name = "iam_for_apigateway_idp"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
+  assume_role_policy = <<-EOF
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "apigateway.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "apigateway.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+      ]
     }
-  ]
-}
-EOF
+  EOF
 }
 
 
@@ -40,7 +40,7 @@ resource "aws_api_gateway_rest_api" "sftp-idp-secrets" {
 resource "aws_lambda_permission" "allow_apigateway" {
   statement_id  = "AllowExecutionFromApigateway"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.sftp-idp.function_name}"
+  function_name = aws_lambda_function.sftp-idp.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.sftp-idp-secrets.execution_arn}/*/*/*"
 }
@@ -50,6 +50,7 @@ resource "aws_api_gateway_deployment" "prod" {
   triggers = {
     redeployment = sha1(jsonencode([aws_api_gateway_rest_api.sftp-idp-secrets.body]))
   }
+
   lifecycle {
     create_before_destroy = true
   }
@@ -57,7 +58,7 @@ resource "aws_api_gateway_deployment" "prod" {
 
 resource "aws_api_gateway_stage" "prod" {
   stage_name    = "prod"
-  rest_api_id   = "${aws_api_gateway_rest_api.sftp-idp-secrets.id}"
-  deployment_id = "${aws_api_gateway_deployment.prod.id}"
+  rest_api_id   = aws_api_gateway_rest_api.sftp-idp-secrets.id
+  deployment_id = aws_api_gateway_deployment.prod.id
 }
 

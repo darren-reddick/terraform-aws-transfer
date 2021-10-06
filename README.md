@@ -1,5 +1,6 @@
 # terraform-aws-transfer
-This is a Terraform module to create a custom identity provider for the AWS Transfer for SFTP service.  
+
+This is a Terraform module to create a custom identity provider for the AWS Transfer for SFTP service.
 
 This module aims to set up an identity provider built on:
 * API Gateway
@@ -14,7 +15,9 @@ A DynamoDB table will be created by the resource and can be used to store SFTP u
 
 Alternatively for security, the credentials can be stored as AWS Secrets.
 
-The infrastructure code is based on the example provided (in the CF template) in the AWS Storage Blog article https://aws.amazon.com/blogs/storage/enable-password-authentication-for-aws-transfer-for-sftp-using-aws-secrets-manager/. That example uses AWS Secrets Manager which costs $0.40 per Secret so a DynamoDB based solution may be more palatable as having many users may incur high costs on smaller budgets.
+The infrastructure code is based on the example provided (in the CF template) in the AWS Storage Blog article
+https://aws.amazon.com/blogs/storage/enable-password-authentication-for-aws-transfer-for-sftp-using-aws-secrets-manager/.
+That example uses AWS Secrets Manager which costs $0.40 per Secret so a DynamoDB based solution may be more palatable as having many users may incur high costs on smaller budgets.
 
 ## Inputs
 
@@ -35,10 +38,8 @@ The infrastructure code is based on the example provided (in the CF template) in
 ```hcl-terraform
 module "sftp-idp" {
   source                = "../.."
-  dynamo_table_name      = "my-sftp-authentication-table"
 }
 ```
-
 
 ## Examples
 
@@ -46,6 +47,5 @@ module "sftp-idp" {
 * [Public with AWS Secrets](https://github.com/devopsgoat/terraform-aws-transfer/tree/master/examples/public-secrets)
 
 ## Terraform Versions
-This module supports Terraform v0.12 and v0.13
 
-
+This module supports Terraform v1.0.
