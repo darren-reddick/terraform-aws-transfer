@@ -22,7 +22,7 @@ paths:
       - sigv4: []
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: ${LAMBDA_INVOKE_URI}
+        uri: ${LAMBDA_INVOKE_ARN}
         responses:
           default:
             statusCode: "200"
