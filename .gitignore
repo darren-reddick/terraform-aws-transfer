@@ -1,0 +1,9 @@
+.terraform
+
+# use a backend!
+*.tfstate*
+
+sftp-idp.zip
+
+# not using lockfiles for the moment
+.terraform.lock.hcl

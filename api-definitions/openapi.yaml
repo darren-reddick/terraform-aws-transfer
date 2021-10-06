@@ -22,7 +22,7 @@ paths:
       - sigv4: []
       x-amazon-apigateway-integration:
         httpMethod: "POST"
-        uri: "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:177092215856:function:sftp-idp/invocations"
+        uri: ${LAMBDA_INVOKE_ARN}
         responses:
           default:
             statusCode: "200"
