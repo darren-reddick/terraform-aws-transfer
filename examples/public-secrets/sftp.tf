@@ -106,7 +106,7 @@ resource "aws_transfer_server" "sftp" {
 }
 
 module "idp" {
-  source      = "../.."
+  source = "../.."
 
   creds_store = "secrets"
 }

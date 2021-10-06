@@ -20,12 +20,12 @@ resource "aws_iam_role" "iam_for_apigateway_idp" {
 
 
 resource "aws_iam_role_policy_attachment" "apigateway-cloudwatchlogs" {
-  role       = "${aws_iam_role.iam_for_apigateway_idp.name}"
+  role       = aws_iam_role.iam_for_apigateway_idp.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
 
 resource "aws_api_gateway_account" "api_gateway_account" {
-  cloudwatch_role_arn = "${aws_iam_role.iam_for_apigateway_idp.arn}"
+  cloudwatch_role_arn = aws_iam_role.iam_for_apigateway_idp.arn
 }
 
 resource "aws_api_gateway_rest_api" "sftp-idp-secrets" {
@@ -46,7 +46,7 @@ resource "aws_lambda_permission" "allow_apigateway" {
 }
 
 resource "aws_api_gateway_deployment" "prod" {
-  rest_api_id = "${aws_api_gateway_rest_api.sftp-idp-secrets.id}"
+  rest_api_id = aws_api_gateway_rest_api.sftp-idp-secrets.id
   triggers = {
     redeployment = sha1(jsonencode([aws_api_gateway_rest_api.sftp-idp-secrets.body]))
   }
