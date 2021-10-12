@@ -2,8 +2,8 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-# role for SFTP server
 resource "aws_iam_role" "sftp" {
+  # role for SFTP server
   name = "sftp-server-iam-role"
 
   assume_role_policy = <<-POLICY

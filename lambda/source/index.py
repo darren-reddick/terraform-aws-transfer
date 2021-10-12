@@ -18,7 +18,6 @@ def lambda_handler(event, context):
         print("No authentication method set")
         return {}
 
-
     if 'username' not in event or 'serverId' not in event:
         print("Incoming username or serverId missing  - Unexpected")
         return response_data

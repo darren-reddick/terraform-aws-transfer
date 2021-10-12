@@ -26,20 +26,26 @@ For guidance the following example code will create this Secret:
 
 ```
 resource "aws_secretsmanager_secret" "secret" {
-  name                = "SFTP/user1"
+  name = "SFTP/user1"
 }
 
 resource "aws_secretsmanager_secret_version" "secret" {
-  secret_id     = "${aws_secretsmanager_secret.secret.id}"
-  secret_string = <<-EOF
+  secret_id     = aws_secretsmanager_secret.secret.id
+  secret_string = <<-POLICY
     {
-      "HomeDirectoryDetails": "[{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/$${Transfer:UserName}\"}]",
+      "HomeDirectoryDetails": "[{\"Entry\": \"/\", \"Target\": \"/${aws_s3_bucket.sftp.id}/$${Transfer:UserName}\"}]",
       "Password": "Password1",
-      "Role": "arn:aws:iam::XXXXXXX:role/transfer-user-iam-role",
+      "Role": "${aws_iam_role.foo.arn}",
       "UserId": "user1"
     }
-  EOF
+  POLICY
 }
+```
+
+The user would connect with
+
+```
+sftp user1@<endpoint>
 ```
 
 ## Outputs

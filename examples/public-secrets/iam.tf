@@ -1,20 +1,20 @@
 resource "aws_iam_role" "foo" {
   name = "transfer-user-iam-role"
 
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-        "Effect": "Allow",
-        "Principal": {
-            "Service": "transfer.amazonaws.com"
-        },
-        "Action": "sts:AssumeRole"
-        }
-    ]
-}
-EOF
+  assume_role_policy = <<-POLICY
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "transfer.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+            }
+        ]
+    }
+  POLICY
 }
 
 resource "aws_iam_role_policy" "foo" {

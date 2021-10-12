@@ -22,7 +22,7 @@ data "archive_file" "sftp-idp" {
 resource "aws_iam_role" "iam_for_lambda_idp" {
   name = "iam_for_lambda_idp"
 
-  assume_role_policy = <<-EOF
+  assume_role_policy = <<-POLICY
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -36,7 +36,7 @@ resource "aws_iam_role" "iam_for_lambda_idp" {
         }
       ]
     }
-  EOF
+  POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs_idp" {
@@ -49,7 +49,7 @@ resource "aws_iam_policy" "sftp-idp" {
   path        = "/"
   description = "IAM policy IdP service for SFTP in Lambda"
 
-  policy = <<-EOF
+  policy = <<-POLICY
     {
         "Version": "2012-10-17",
         "Statement": [
@@ -65,7 +65,7 @@ resource "aws_iam_policy" "sftp-idp" {
             }
         ]
     }
-  EOF
+  POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "sftp-idp1" {

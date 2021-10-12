@@ -37,7 +37,7 @@ That example uses AWS Secrets Manager which costs $0.40 per Secret so a DynamoDB
 ## Usage
 ```hcl-terraform
 module "sftp-idp" {
-  source                = "../.."
+  source = "../.."
 }
 ```
 

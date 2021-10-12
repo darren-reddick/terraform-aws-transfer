@@ -1,7 +1,7 @@
 resource "aws_iam_role" "iam_for_apigateway_idp" {
   name = "iam_for_apigateway_idp"
 
-  assume_role_policy = <<-EOF
+  assume_role_policy = <<-POLICY
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -15,9 +15,8 @@ resource "aws_iam_role" "iam_for_apigateway_idp" {
         }
       ]
     }
-  EOF
+  POLICY
 }
-
 
 resource "aws_iam_role_policy_attachment" "apigateway-cloudwatchlogs" {
   role       = aws_iam_role.iam_for_apigateway_idp.name
@@ -34,7 +33,12 @@ resource "aws_api_gateway_rest_api" "sftp-idp-secrets" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  body = data.template_file.api-definition.rendered
+  body = templatefile(
+    "${path.module}/api-definitions/openapi.yaml",
+    {
+      LAMBDA_INVOKE_ARN = aws_lambda_function.sftp-idp.invoke_arn
+    }
+  )
 }
 
 resource "aws_lambda_permission" "allow_apigateway" {
@@ -61,4 +65,3 @@ resource "aws_api_gateway_stage" "prod" {
   rest_api_id   = aws_api_gateway_rest_api.sftp-idp-secrets.id
   deployment_id = aws_api_gateway_deployment.prod.id
 }
-
