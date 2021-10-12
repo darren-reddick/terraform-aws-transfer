@@ -74,7 +74,7 @@ def lambda_handler(event, context):
 
     if 'HomeDirectoryDetails' in resp_dict:
         print("HomeDirectoryDetails found - Applying setting for virtual folders")
-        resp_data['HomeDirectoryDetails'] = resp_dict['HomeDirectoryDetails']
+        resp_data['HomeDirectoryDetails'] = json.dumps(resp_dict['HomeDirectoryDetails'])
         resp_data['HomeDirectoryType'] = "LOGICAL"
     elif 'HomeDirectory' in resp_dict:
         print("HomeDirectory found - Cannot be used with HomeDirectoryDetails")
@@ -82,27 +82,22 @@ def lambda_handler(event, context):
     else:
         print("HomeDirectory not found - Defaulting to /")
 
-    print("Completed Response Data: "+json.dumps(resp_data))
+    print("Completed Response Data: " + json.dumps(resp_data))
     return resp_data
 
 def auth_dynamo(id):
-    client = boto3.client('dynamodb')
-    ret={}
+    client = boto3.resource('dynamodb')
+    table = client.Table(os.environ['dynamo_table_name'])
     try:
         # lookup the user in the table
-        response = client.get_item(
-            TableName=os.environ['dynamo_table_name'],
-            Key={
-                'UserId': {
-                    'S': id
-                }
+        response = table.get_item(
+            Key = {
+                'UserId': id
             }
         )
         # Extract the values from the response
         if response.get("Item"):
-            for k, v in response.get("Item").items():
-                ret[k]=list(v.values())[0]
-            return ret
+            return response.get("Item")
         else:
             return None
     except ClientError as err:
