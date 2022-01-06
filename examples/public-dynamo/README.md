@@ -16,11 +16,13 @@ Once the service has been started, a user can be set up by adding a record to th
 
 NOTE: All fields are ***String*** fields including the ***HomeDirectoryDetails*** which should contain a JSON string
 
-| UserId | HomeDirectoryDetails | Role | Password |
-|--------|----------------------|------|----------|
-| user1 | [{"Entry": "/", "Target": "/test.devopsgoat/${Transfer:UserName}"}] | arn:aws:iam::[account id]:role/transfer-user-iam-role | Password1 |
+| UserId | HomeDirectoryDetails | Role | Password | _AcceptedIpNetwork*_ |
+|--------|----------------------|------|----------|-------------------|
+| user1 | [{\"Entry\": \"/\", \"Target\": \"/test.devopsgoat/${Transfer:UserName}\"}] | arn:aws:iam::[account id]:role/transfer-user-iam-role | Password1 | 192.168.1.0/24 |
 
 This will create a user **user1** which is chroot'd to the **/test.devopsgoat/user1** virtual directory in S3.
+
+\* **_AcceptedIpNetwork_** is an optional CIDR for the allowed client source IP address range.
 
 ### Create User with a Password
 ```bash
