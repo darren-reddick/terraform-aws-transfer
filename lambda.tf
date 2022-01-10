@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "sftp-idp" {
   filename         = "${path.module}/sftp-idp.zip"
-  function_name    = "sftp-idp"
+  function_name    = "sftp-idp-${var.stage}"
   role             = aws_iam_role.iam_for_lambda_idp.arn
   handler          = "index.lambda_handler"
   source_code_hash = data.archive_file.sftp-idp.output_base64sha256
@@ -20,7 +20,7 @@ data "archive_file" "sftp-idp" {
 }
 
 resource "aws_iam_role" "iam_for_lambda_idp" {
-  name = "iam_for_lambda_idp"
+  name = "iam_for_lambda_idp-${var.stage}"
 
   assume_role_policy = <<-EOF
     {
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logs_idp" {
 }
 
 resource "aws_iam_policy" "sftp-idp" {
-  name        = "sftp-idp"
+  name        = "sftp-idp-${var.stage}"
   path        = "/"
   description = "IAM policy IdP service for SFTP in Lambda"
 
@@ -53,11 +53,6 @@ resource "aws_iam_policy" "sftp-idp" {
     {
         "Version": "2012-10-17",
         "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": "dynamodb:GetItem",
-                "Resource": "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.authentication.name}"
-            },
             {
                 "Effect": "Allow",
                 "Action": "secretsmanager:GetSecretValue",

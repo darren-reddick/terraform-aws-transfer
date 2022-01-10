@@ -3,5 +3,5 @@ output "endpoint" {
 }
 
 output "role" {
-  value = aws_iam_role.foo.arn
+  value = aws_iam_role.transfer.arn
 }
