@@ -1,5 +1,5 @@
-resource "aws_iam_role" "foo" {
-  name = "transfer-user-iam-role"
+resource "aws_iam_role" "transfer" {
+  name = "transfer-user-iam-role-${var.stage}"
 
   assume_role_policy = <<EOF
 {
@@ -17,9 +17,9 @@ resource "aws_iam_role" "foo" {
 EOF
 }
 
-resource "aws_iam_role_policy" "foo" {
-  name = "transfer-user-iam-policy"
-  role = aws_iam_role.foo.id
+resource "aws_iam_role_policy" "transfer" {
+  name = "transfer-user-iam-policy-${var.stage}"
+  role = aws_iam_role.transfer.id
 
   policy = <<-POLICY
     {

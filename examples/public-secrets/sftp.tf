@@ -4,7 +4,7 @@ data "aws_caller_identity" "current" {}
 
 # role for SFTP server
 resource "aws_iam_role" "sftp" {
-  name = "sftp-server-iam-role"
+  name = "sftp-server-iam-role-${var.stage}"
 
   assume_role_policy = <<-POLICY
     {
@@ -24,7 +24,7 @@ resource "aws_iam_role" "sftp" {
 
 resource "aws_iam_role" "sftp_log" {
   # log role for SFTP server
-  name = "sftp-server-iam-log-role"
+  name = "sftp-server-iam-log-role-${var.stage}"
 
   assume_role_policy = <<-POLICY
     {
@@ -44,7 +44,7 @@ resource "aws_iam_role" "sftp_log" {
 
 resource "aws_iam_role_policy" "sftp" {
   # policy to allow invocation of IdP API
-  name = "sftp-server-iam-policy"
+  name = "sftp-server-iam-policy-${var.stage}"
   role = aws_iam_role.sftp.id
 
   policy = <<-POLICY
@@ -74,7 +74,7 @@ resource "aws_iam_role_policy" "sftp" {
 
 resource "aws_iam_role_policy" "sftp_log" {
   # policy to allow logging to Cloudwatch
-  name = "sftp-server-iam-log-policy"
+  name = "sftp-server-iam-log-policy-${var.stage}"
   role = aws_iam_role.sftp_log.id
 
   policy = <<-POLICY
@@ -107,6 +107,6 @@ resource "aws_transfer_server" "sftp" {
 
 module "idp" {
   source = "../.."
+  stage = var.stage
 
-  creds_store = "secrets"
 }

@@ -8,9 +8,7 @@ from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
     get_secret = None
-    if os.environ.get("dynamo_table_name"):
-        get_secret = get_secret_dynamo
-    elif os.environ.get("SecretsManagerRegion"):
+    if os.environ.get("SecretsManagerRegion"):
         get_secret = get_secret_sm
     else:
         print("No authentication method set")
@@ -35,7 +33,8 @@ def lambda_handler(event, context):
         )
     )
 
-    # Check for password and set authentication type appropriately. No password means SSH auth
+    # Check for password and set authentication type appropriately.
+    # No password means SSH auth
     print("Start User Authentication Flow")
     if input_password != "":
         print("Using PASSWORD authentication")
@@ -47,9 +46,11 @@ def lambda_handler(event, context):
         print("Using SSH authentication")
         authentication_type = "SSH"
 
-    # Retrieve our user details from the secret. For all key-value pairs stored in
-    # SecretManager/DynamoDB, checking the protocol-specified secret first, then use
-    # generic ones. e.g. If SFTPPassword and Password both exists, will be using
+    # Retrieve our user details from the secret. F
+    # or all key-value pairs stored in SecretManager/DynamoDB
+    # checking the protocol-specified secret first, then use
+    # generic ones.
+    # e.g. If SFTPPassword and Password both exists, will be using
     # SFTPPassword for authentication
     secret_dict = get_secret(input_username)
 
@@ -66,12 +67,14 @@ def lambda_handler(event, context):
                 "User authenticated, calling build_response with: "
                 + authentication_type
             )
-            return build_response(secret_dict, authentication_type, input_protocol)
+            return build_response(secret_dict,
+                                  authentication_type, input_protocol)
         else:
             print("User failed authentication return empty response")
             return {}
     else:
-        # Otherwise something went wrong. Most likely the object name is not there
+        # Otherwise something went wrong.
+        # Most likely the object name is not there
         print("Secrets Manager exception thrown - Returning empty response")
         # Return an empty data response meaning the user was not authenticated
         return {}
@@ -86,7 +89,8 @@ def lookup(secret_dict, key, input_protocol):
 
 
 def check_ipaddress(secret_dict, input_sourceIp, input_protocol):
-    accepted_ip_network = lookup(secret_dict, "AcceptedIpNetwork", input_protocol)
+    accepted_ip_network = lookup(secret_dict,
+                                 "AcceptedIpNetwork", input_protocol)
     if not accepted_ip_network:
         # No IP provided so skip checks
         print("No IP range provided - Skip IP check")
@@ -102,7 +106,9 @@ def check_ipaddress(secret_dict, input_sourceIp, input_protocol):
 
 
 def authenticate_user(auth_type, secret_dict, input_password, input_protocol):
-    # Function returns True if: auth_type is password and passwords match or auth_type is SSH. Otherwise returns False
+    # Function returns True if: auth_type is password and passwords match
+    # or auth_type is SSH.
+    # Otherwise returns False
     if auth_type == "SSH":
         # Place for additional checks in future
         print("Skip password check as SSH login request")
@@ -112,14 +118,16 @@ def authenticate_user(auth_type, secret_dict, input_password, input_protocol):
         # Retrieve the password from the secret if exists
         password = lookup(secret_dict, "Password", input_protocol)
         if not password:
-            print("Unable to authenticate user - No field match in Secret for password")
+            print("Unable to authenticate user - \
+                No field match in Secret for password")
             return False
 
         if input_password == password:
             return True
         else:
             print(
-                "Unable to authenticate user - Incoming password does not match stored"
+                "Unable to authenticate user - \
+                    Incoming password does not match stored"
             )
             return False
 
@@ -140,15 +148,19 @@ def build_response(secret_dict, auth_type, input_protocol):
     if policy:
         response_data["Policy"] = policy
 
-    # External Auth providers support chroot and virtual folder assignments so we'll check for that
-    home_directory_details = lookup(secret_dict, "HomeDirectoryDetails", input_protocol)
+    # External Auth providers support chroot
+    # and virtual folder assignments so we'll check for that
+    home_directory_details = lookup(secret_dict,
+                                    "HomeDirectoryDetails", input_protocol)
     if home_directory_details:
         print(
-            "HomeDirectoryDetails found - Applying setting for virtual folders - "
+            "HomeDirectoryDetails found - "
+            "Applying setting for virtual folders - "
             "Note: Cannot be used in conjunction with key: HomeDirectory"
         )
         response_data["HomeDirectoryDetails"] = home_directory_details
-        # If we have a virtual folder setup then we also need to set HomeDirectoryType to "Logical"
+        # If we have a virtual folder setup
+        # then we also need to set HomeDirectoryType to "Logical"
         print("Setting HomeDirectoryType to LOGICAL")
         response_data["HomeDirectoryType"] = "LOGICAL"
 
@@ -157,7 +169,8 @@ def build_response(secret_dict, auth_type, input_protocol):
     home_directory = lookup(secret_dict, "HomeDirectory", input_protocol)
     if home_directory:
         print(
-            "HomeDirectory found - Note: Cannot be used in conjunction with key: HomeDirectoryDetails"
+            "HomeDirectory found - Note: "
+            "Cannot be used in conjunction with key: HomeDirectoryDetails"
         )
         response_data["HomeDirectory"] = home_directory
 
@@ -173,28 +186,6 @@ def build_response(secret_dict, auth_type, input_protocol):
     return response_data
 
 
-def get_secret_dynamo(id):
-    client = boto3.client("dynamodb")
-    try:
-        # lookup the user in the table
-        response = client.get_item(
-            TableName=os.environ["dynamo_table_name"], Key={"UserId": {"S": id}}
-        )
-        # Extract the values from the response
-        if response.get("Item"):
-            return {k: list(v.values())[0] for k, v in response.get("Item").items()}
-        else:
-            return None
-    except ClientError as err:
-        print(
-            "Error Talking to Dynamo: "
-            + err.response["Error"]["Code"]
-            + ", Message: "
-            + str(err)
-        )
-        return None
-
-
 def get_secret_sm(id):
     region = os.environ["SecretsManagerRegion"]
     print("Secrets Manager Region: " + region)
@@ -208,7 +199,8 @@ def get_secret_sm(id):
     try:
         resp = client.get_secret_value(SecretId="SFTP/" + id)
         # Decrypts secret using the associated KMS CMK.
-        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        # Depending on whether the secret is a string or binary,
+        # one of these fields will be populated.
         if "SecretString" in resp:
             print("Found Secret String")
             return json.loads(resp["SecretString"])

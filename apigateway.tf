@@ -1,5 +1,5 @@
 resource "aws_iam_role" "iam_for_apigateway_idp" {
-  name = "iam_for_apigateway_idp"
+  name = "iam_for_apigateway_idp-${var.stage}"
 
   assume_role_policy = <<-EOF
     {
@@ -45,7 +45,7 @@ resource "aws_lambda_permission" "allow_apigateway" {
   source_arn    = "${aws_api_gateway_rest_api.sftp-idp-secrets.execution_arn}/*/*/*"
 }
 
-resource "aws_api_gateway_deployment" "prod" {
+resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.sftp-idp-secrets.id
   triggers = {
     redeployment = sha1(jsonencode([aws_api_gateway_rest_api.sftp-idp-secrets.body]))
@@ -56,9 +56,9 @@ resource "aws_api_gateway_deployment" "prod" {
   }
 }
 
-resource "aws_api_gateway_stage" "prod" {
-  stage_name    = "prod"
+resource "aws_api_gateway_stage" "stage" {
+  stage_name    = var.stage
   rest_api_id   = aws_api_gateway_rest_api.sftp-idp-secrets.id
-  deployment_id = aws_api_gateway_deployment.prod.id
+  deployment_id = aws_api_gateway_deployment.deployment.id
 }
 
