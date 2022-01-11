@@ -135,7 +135,8 @@ def authenticate_user(auth_type, secret_dict, input_password, input_protocol):
 # Build out our response data for an authenticated response
 def build_response(secret_dict, auth_type, input_protocol):
     response_data = {}
-    # Check for each key value pair. These are required so set to empty string if missing
+    # Check for each key value pair.
+    # These are required so set to empty string if missing
     role = lookup(secret_dict, "Role", input_protocol)
     if role:
         response_data["Role"] = role

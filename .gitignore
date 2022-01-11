@@ -7,3 +7,7 @@ sftp-idp.zip
 
 # not using lockfiles for the moment
 .terraform.lock.hcl
+
+.vscode/
+.idea/
+*/plan.out
