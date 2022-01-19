@@ -28,6 +28,6 @@ jobs:
         terraform_version: 0.14.11
     - name: Terraform test
       id: test
-      run: make tf-test
+      run: make e2etests
       continue-on-error: false
 

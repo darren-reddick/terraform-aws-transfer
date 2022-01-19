@@ -8,3 +8,4 @@ tf-format:
 .PHONY: e2etests
 e2etests:
 	$(MAKE) -C e2etests test
+	$(MAKE) -C e2etests destroy
