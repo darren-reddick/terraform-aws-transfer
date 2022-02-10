@@ -11,6 +11,8 @@ resource "aws_lambda_function" "sftp-idp" {
       "${local.auth_source_name}" = local.auth_source_value
     }
   }
+
+  tags = var.tags
 }
 
 data "archive_file" "sftp-idp" {
@@ -37,6 +39,8 @@ resource "aws_iam_role" "iam_for_lambda_idp" {
       ]
     }
   EOF
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs_idp" {
@@ -61,6 +65,8 @@ resource "aws_iam_policy" "sftp-idp" {
         ]
     }
   EOF
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "sftp-idp1" {
