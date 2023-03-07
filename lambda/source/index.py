@@ -149,6 +149,11 @@ def build_response(secret_dict, auth_type, input_protocol):
     if policy:
         response_data["Policy"] = policy
 
+    # Add support for EFS-required POSIX policy
+    posixProfile = lookup(secret_dict, "PosixProfile", input_protocol)
+    if posixProfile:
+        response_data["PosixProfile"] = posixProfile
+
     # External Auth providers support chroot
     # and virtual folder assignments so we'll check for that
     home_directory_details = lookup(secret_dict,
