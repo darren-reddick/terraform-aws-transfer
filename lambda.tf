@@ -4,7 +4,7 @@ resource "aws_lambda_function" "sftp-idp" {
   role             = aws_iam_role.iam_for_lambda_idp.arn
   handler          = "index.lambda_handler"
   source_code_hash = data.archive_file.sftp-idp.output_base64sha256
-  runtime          = "python3.7"
+  runtime          = "python3.12"
 
   environment {
     variables = {
