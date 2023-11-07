@@ -1,1 +1,5 @@
-variable "dynamo_table_name" {}
+variable "stage" {
+  description = "The deployment stage"
+  default     = "dev"
+}
+

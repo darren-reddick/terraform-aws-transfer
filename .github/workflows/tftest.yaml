@@ -1,0 +1,33 @@
+name: tftest
+on: [pull_request]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.11
+    - name: Terraform test
+      id: fmt
+      run: make tf-format
+      continue-on-error: false
+  e2etests:
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.number }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY_ID }}
+      AWS_DEFAULT_REGION: eu-west1
+      TERRAFORM_STATE_BUCKET: ${{ secrets.TERRAFORM_STATE_BUCKET }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.11
+    - name: Terraform test
+      id: test
+      run: make e2etests
+      continue-on-error: false
+

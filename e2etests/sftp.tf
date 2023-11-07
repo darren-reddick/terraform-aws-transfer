@@ -106,7 +106,7 @@ resource "aws_transfer_server" "sftp" {
 }
 
 module "idp" {
-  source = "../.."
+  source = "../"
   stage  = var.stage
 
 }
